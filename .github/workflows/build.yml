@@ -3,7 +3,8 @@ name: Build Input Buffer
 on:
 workflow_dispatch:
 push:
-branches: ["**"]
+branches:
+- main
 
 jobs:
 build:
