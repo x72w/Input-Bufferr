@@ -1,43 +1,42 @@
-
 name: Build Input Buffer
 
 on:
-  workflow_dispatch:
-  push:
-    branches: ["**"]
+workflow_dispatch:
+push:
+branches: ["**"]
 
 jobs:
-  build:
-    name: Build ${{ matrix.target }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - Android32
-          - Android64
+build:
+name: Build ${{ matrix.target }}
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Download source
-        uses: actions/checkout@v4
+strategy:
+  fail-fast: false
+  matrix:
+    target:
+      - Android32
+      - Android64
 
-      - name: Extract project
-        run: |
-          python -c "import zipfile; zipfile.ZipFile('predictive-input-buffer-build-ready.zip').extractall('.')"
+steps:
+  - name: Download source
+    uses: actions/checkout@v4
 
-      -         - name: Compile Geode mod
-          uses: geode-sdk/build-geode-mod@main
-          with:
-            sdk: latest
-            path: predictive-input-buffer
-            target: ${{ matrix.target }}
+  - name: Extract project
+    run: |
+      python -c "import zipfile; zipfile.ZipFile('predictive-input-buffer-build-ready.zip').extractall('.')"
 
-      - name: Upload compiled files
-        uses: actions/upload-artifact@v4
-        with:
-          name: Input-Buffer-${{ matrix.target }}
-          path: |
-            predictive-input-buffer/build/**/*.geode
-            predictive-input-buffer/build/**/*.zip
-          if-no-files-found: warn
-          
+  - name: Compile Geode mod
+    uses: geode-sdk/build-geode-mod@main
+    with:
+      sdk: latest
+      path: predictive-input-buffer
+      target: ${{ matrix.target }}
+
+  - name: Upload compiled files
+    uses: actions/upload-artifact@v4
+    with:
+      name: Input-Buffer-${{ matrix.target }}
+      path: |
+        predictive-input-buffer/build/**/*.geode
+        predictive-input-buffer/build/**/*.zip
+      if-no-files-found: warn
